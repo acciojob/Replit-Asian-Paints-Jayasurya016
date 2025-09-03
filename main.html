@@ -1,13 +1,47 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replit Asian Paints</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .grid-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4a5568;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        }
+        .text-input, .color-input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            font-size: 1rem;
+            color: #4a5568;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
 </head>
-
-
-	<body class="flex items-center justify-center min-h-screen p-4">
+<body class="flex items-center justify-center min-h-screen p-4">
     <div class="bg-white p-8 rounded-xl shadow-2xl max-w-lg w-full">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Asian Paints Grid</h1>
 
@@ -48,10 +82,82 @@
             </div>
         </div>
     </div>
-	
-    <script type="text/javascript" src="./script.js">
-</script>
 
+    <script>
+        // Use a function to show custom messages instead of alert()
+        function showMessage(title, message) {
+            const modal = document.getElementById('message-modal');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            modal.classList.remove('hidden');
+        }
+
+        const modalOkBtn = document.getElementById('modal-ok-btn');
+        modalOkBtn.onclick = () => {
+            document.getElementById('message-modal').classList.add('hidden');
+        };
+
+        const gridContainer = document.getElementById('grid-container');
+        const blockIdInput = document.getElementById('block_id');
+        const colorIdInput = document.getElementById('colour_id');
+        const changeButton = document.getElementById('change_button');
+        const resetButton = document.getElementById('Reset');
+
+        // Generate the 3x3 grid dynamically
+        for (let i = 1; i <= 9; i++) {
+            const gridItem = document.createElement('div');
+            // Using ID as a number as per "the third element of grid have the id 3" instruction.
+            gridItem.id = i.toString(); 
+            // Using class for shared styling as per "the item should have an id of grid-item" instruction.
+            gridItem.className = 'grid-item bg-gray-100 aspect-square';
+            gridItem.innerText = i;
+            gridContainer.appendChild(gridItem);
+        }
+
+        changeButton.addEventListener('click', () => {
+            const blockId = blockIdInput.value;
+            const colorId = colorIdInput.value;
+
+            // Simple validation
+            if (!blockId || !colorId) {
+                showMessage('Error', 'Please enter both a Grid ID and a color.');
+                return;
+            }
+
+            const gridItem = document.getElementById(blockId);
+            if (!gridItem) {
+                showMessage('Error', 'Invalid Grid ID. Please enter a number between 1 and 9.');
+                return;
+            }
+
+            // Reset background color of all grid items to transparent
+            const allGridItems = document.querySelectorAll('.grid-item');
+            allGridItems.forEach(item => {
+                item.style.backgroundColor = 'transparent';
+                item.style.color = '#4a5568'; // Reset text color
+            });
+
+            // Set the new color for the selected grid item
+            gridItem.style.backgroundColor = colorId;
+            gridItem.style.color = '#ffffff'; // Change text to white for better contrast
+        });
+
+        resetButton.addEventListener('click', () => {
+            const allGridItems = document.querySelectorAll('.grid-item');
+            allGridItems.forEach(item => {
+                item.style.backgroundColor = 'transparent';
+                item.style.color = '#4a5568';
+            });
+            blockIdInput.value = '';
+            colorIdInput.value = '';
+        });
+
+        // Add a click event listener to each grid item to populate the input field
+        gridContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('grid-item')) {
+                blockIdInput.value = e.target.id;
+            }
+        });
+    </script>
 </body>
-
 </html>
